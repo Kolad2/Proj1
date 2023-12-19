@@ -76,6 +76,7 @@ else:
 print("Current device: " + device)
 #1
 print(1)
+
 sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
 sam.to(device=device)
 
