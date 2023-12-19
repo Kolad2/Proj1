@@ -16,7 +16,6 @@ from ShpMaskWriter import mask_write, mask_write_treads
 print("PyTorch version:", torch.__version__)
 print("Torchvision version:", torchvision.__version__)
 print("CUDA is available:", torch.cuda.is_available())
-exit()
 
 Path0 = "includes/Pictures"
 # FileList = sorted(GetFiles(Path0))
@@ -62,11 +61,12 @@ mask_generator_ = SamAutomaticMaskGenerator(
     min_mask_region_area=0,  # Requires open-cv to run post-processing
 )
 
-
+print("mask generator have started")
 masks = mask_generator_.generate(image)
+print("mask generator ends")
+"""
 with open("mask.pkl", "wb") as fp:
     pickle.dump(masks, fp)
-"""
 print("load mask start")
 with open("file.pkl", "rb") as fp:
     masks = pickle.load(fp)
@@ -93,7 +93,6 @@ def show_anns(ax, anns):
         ax.imshow(cv2image)
 
 
-"""
 fig = plt.figure(figsize=(10,5))
 ax = [fig.add_subplot(1, 2, 1),
       fig.add_subplot(1, 2, 2)]
@@ -103,11 +102,9 @@ show_anns(ax[1], masks)
 ax[0].axis('off')
 ax[1].axis('off')
 plt.show()
-"""
+
 
 mask_write_treads("includes/Shape/Shape" + "{}".format(i_num), masks)
-
-exit()
 
 """
 Mask generation returns a list over masks, where each mask is a dictionary containing various data about the mask. These keys are:
