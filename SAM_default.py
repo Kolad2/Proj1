@@ -1,54 +1,25 @@
-# -*- coding: utf-8 -*-
-# https://youtu.be/fVeW9a6wItM
-"""
-
-@author: Digitalsreeni (Sreenivas Bhattiprolu)
-
-First make sure pytorch and torchcvision are installed, for GPU
-In my case: pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
-
-pip install opencv-python matplotlib
-pip install 'git+https://github.com/facebookresearch/segment-anything.git'
-
-OR download the repo locally and install
-and:  pip install -e .
-
-Download the default trained model: 
-    https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
-
-Other models are available:
-    https://github.com/facebookresearch/segment-anything#model-checkpoints
-
-"""
-# Tested on python 3.9.16
-
+import os
+import sys
+import PathCreator
 import torch
 import torchvision
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+import time
+import pickle
+import math
+from segment_anything import sam_model_registry, SamAutomaticMaskGenerator, SamPredictor
+from ListFiles import GetFiles
+from ShpMaskWriter import mask_write, mask_write_treads
 
 print("PyTorch version:", torch.__version__)
 print("Torchvision version:", torchvision.__version__)
 print("CUDA is available:", torch.cuda.is_available())
+exit()
 
-import numpy as np
-import matplotlib.pyplot as plt
-import cv2
-import sys
-import os
-import time
-import pickle
-import math
 
-Path_Add = os.path.abspath("includes")
-sys.path.insert(0, Path_Add)
-from ListFiles import GetFiles
-from ShpMaskWriter import mask_write, mask_write_treads
 
-Path_Add = os.path.abspath("includes/segment-anything")
-sys.path.insert(0, Path_Add)
-from segment_anything import sam_model_registry, SamAutomaticMaskGenerator, SamPredictor
-
-Path_Add = os.path.abspath("includes/pyshp-master")
-sys.path.insert(0, Path_Add)
 
 
 Path0 = "includes/Pictures"
