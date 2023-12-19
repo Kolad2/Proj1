@@ -74,8 +74,13 @@ if (torch.cuda.is_available() == False):
 else:
     device = "cuda"
 print("Current device: " + device)
+<<<<<<< HEAD
 
 
+=======
+#1
+print(1)
+>>>>>>> 611ddeb (Initial commit)
 sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
 sam.to(device=device)
 
