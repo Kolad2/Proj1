@@ -21,14 +21,18 @@ exit()
 Path0 = "includes/Pictures"
 # FileList = sorted(GetFiles(Path0))
 
-i_num = 0
+
 # FileName = FileList[i_num]
 # FileName = "B21-166b_cut.tif"
-# FileName = "houses2.jpg"
+
+i_num = 0
+FileName = "houses2.jpg"
 
 Path = Path0 + "/" + FileName
 image = cv2.imread(Path)  # Try houses.jpg or neurons.jpg
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+
 CropNLayers = int(math.log2(max(image.shape[1:2])) - 9)
 CropNLayers = (CropNLayers >= 0) * CropNLayers
 
@@ -42,23 +46,9 @@ else:
 device = "cpu"
 print("Current device: " + device)
 
-
+# model inicialization
 sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
 sam.to(device=device)
-
-
-# There are several tunable parameters in automatic mask generation that control
-# how densely points are sampled and what the thresholds are for removing low 
-# quality or duplicate masks. Additionally, generation can be automatically 
-# run on crops of the image to get improved performance on smaller objects, 
-# and post-processing can remove stray pixels and holes. 
-# Here is an example configuration that samples more masks:
-# https://github.com/facebookresearch/segment-anything/blob/9e1eb9fdbc4bca4cd0d948b8ae7fe505d9f4ebc7/segment_anything/automatic_mask_generator.py#L35
-
-# Rerun the following with a few settings, ex. 0.86 & 0.9 for iou_thresh
-# and 0.92 and 0.96 for score_thresh
-
-
 
 mask_generator_ = SamAutomaticMaskGenerator(
     model=sam,
@@ -71,52 +61,6 @@ mask_generator_ = SamAutomaticMaskGenerator(
     crop_n_points_downscale_factor = 2,
     min_mask_region_area=0,  # Requires open-cv to run post-processing
 )
-
-
-"""
-        Using a SAM model, generates masks for the entire image.
-        Generates a grid of point prompts over the image, then filters
-        low quality and duplicate masks. The default settings are chosen
-        for SAM with a ViT-H backbone.
-
-        Arguments:
-          model (Sam): The SAM model to use for mask prediction.
-          points_per_side (int or None): The number of points to be sampled
-            along one side of the image. The total number of points is
-            points_per_side**2. If None, 'point_grids' must provide explicit
-            point sampling.
-          points_per_batch (int): Sets the number of points run simultaneously
-            by the model. Higher numbers may be faster but use more GPU memory.
-          pred_iou_thresh (float): A filtering threshold in [0,1], using the
-            model's predicted mask quality.
-          stability_score_thresh (float): A filtering threshold in [0,1], using
-            the stability of the mask under changes to the cutoff used to binarize
-            the model's mask predictions.
-          stability_score_offset (float): The amount to shift the cutoff when
-            calculated the stability score.
-          box_nms_thresh (float): The box IoU cutoff used by non-maximal
-            suppression to filter duplicate masks.
-          crops_n_layers (int): If >0, mask prediction will be run again on
-            crops of the image. Sets the number of layers to run, where each
-            layer has 2**i_layer number of image crops.
-          crops_nms_thresh (float): The box IoU cutoff used by non-maximal
-            suppression to filter duplicate masks between different crops.
-          crop_overlap_ratio (float): Sets the degree to which crops overlap.
-            In the first crop layer, crops will overlap by this fraction of
-            the image length. Later layers with more crops scale down this overlap.
-          crop_n_points_downscale_factor (int): The number of points-per-side
-            sampled in layer n is scaled down by crop_n_points_downscale_factor**n.
-          point_grids (list(np.ndarray) or None): A list over explicit grids
-            of points used for sampling, normalized to [0,1]. The nth grid in the
-            list is used in the nth crop layer. Exclusive with points_per_side.
-          min_mask_region_area (int): If >0, postprocessing will be applied
-            to remove disconnected regions and holes in masks with area smaller
-            than min_mask_region_area. Requires opencv.
-          output_mode (str): The form masks are returned in. Can be 'binary_mask',
-            'uncompressed_rle', or 'coco_rle'. 'coco_rle' requires pycocotools.
-            For large resolutions, 'binary_mask' may consume large amounts of
-            memory.
-"""
 
 
 masks = mask_generator_.generate(image)
