@@ -18,17 +18,12 @@ print("Torchvision version:", torchvision.__version__)
 print("CUDA is available:", torch.cuda.is_available())
 exit()
 
-
-
-
-
 Path0 = "includes/Pictures"
-FileList = sorted(GetFiles(Path0))
-print(FileList)
+# FileList = sorted(GetFiles(Path0))
 
 i_num = 0
 # FileName = FileList[i_num]
-FileName = "B21-166b_cut.tif"
+# FileName = "B21-166b_cut.tif"
 # FileName = "houses2.jpg"
 
 Path = Path0 + "/" + FileName
@@ -44,9 +39,9 @@ if (torch.cuda.is_available() == False):
     device = "cpu"
 else:
     device = "cuda"
+device = "cpu"
 print("Current device: " + device)
-#1
-print(3)
+
 
 sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
 sam.to(device=device)
