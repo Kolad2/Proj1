@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Header H1
 Header H1 is used to display the Project heading. 
 
@@ -74,3 +75,6 @@ with open("sample.csv","r") as csvinput: # read input csv file
     for row in reader:
         print(row[0])
 ````
+=======
+1
+>>>>>>> origin/master
